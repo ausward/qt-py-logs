@@ -41,22 +41,33 @@ class QTlogger:
         publish.single(self.topic, payload=message, hostname=self.broker, port=self.port)
 
 
-    def log(self, level: str, message: str):
+    def log(self, level: str, message: str, Extra: dict = None):
         """ Log a message with a given severity level.
         args:
             level (str): Severity level of the log (e.g., 'INFO', 'ERROR').
             message (str): The log message.
+            Extra (dict, optional): Additional contextual information to include in the log.
         """
         caller_frame = inspect.stack()
         caller_function = str(caller_frame[1].frame)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
-        json_message = {
-            "from": self.source,
-            "payload": message,
-            "level": level,
-            "timestamp": current_time, 
-            "caller": caller_function
-        }
+        if Extra:
+            json_message = {
+                "from": self.source,
+                "payload": message,
+                "level": level,
+                "timestamp": current_time, 
+                "caller": caller_function,
+                "extra": json.dumps(Extra)
+            }
+        else:
+            json_message = {
+                "from": self.source,
+                "payload": message,
+                "level": level,
+                "timestamp": current_time, 
+                "caller": caller_function
+            }
         threading.Thread(target=self._log, args=(json.dumps(json_message),)).start()
 
 

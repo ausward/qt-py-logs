@@ -42,6 +42,10 @@ logger = QTlogger()
 # Log a message
 logger.log("INFO", "This is an informational message.")
 logger.log("ERROR", "This is an error message.")
+
+# If you want to add additional fields to the log message
+extra_data = {"user_id": 1234, "operation": "data_processing"}
+logger.log("DEBUG", "This is a debug message with extra data.", Extra=extra_data)
 ```
 
 The log messages will be published to the specified MQTT topic in a JSON format:
