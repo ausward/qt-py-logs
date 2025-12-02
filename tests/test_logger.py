@@ -35,20 +35,19 @@ def test_added_Extra_parameter_in_log_method(mock_mqtt_publish_single):
     source = "test_source"
 
     logger = SetupLogger(topic, broker, port, source)
-    
     test_message = "This is a test message with extra."
     test_level = "INFO"
     extra_data = {"user": "tester", "session": "xyz123"}
-    logger.log(test_level, test_message, Extra=extra_data)
+    logger.log(test_level, test_message, extra_data=extra_data)
 
     mock_mqtt_publish_single.assert_called_once()
     args, kwargs = mock_mqtt_publish_single.call_args
 
-    
+
     assert  topic in args
     assert kwargs['hostname'] == broker
     assert kwargs['port'] == port
-    
+
     # Verify payload content
     payload = kwargs['payload']
     import json
@@ -67,7 +66,7 @@ def test_qtlogger_log_method(mock_mqtt_publish_single):
     source = "test_source"
 
     logger = SetupLogger(topic, broker, port, source)
-    
+
     test_message = "This is a test message."
     test_level = "INFO"
     logger.log(test_level, test_message)
@@ -75,11 +74,11 @@ def test_qtlogger_log_method(mock_mqtt_publish_single):
     mock_mqtt_publish_single.assert_called_once()
     args, kwargs = mock_mqtt_publish_single.call_args
 
-    
+
     assert  topic in args
     assert kwargs['hostname'] == broker
     assert kwargs['port'] == port
-    
+
     # Verify payload content
     payload = kwargs['payload']
     import json
@@ -90,5 +89,4 @@ def test_qtlogger_log_method(mock_mqtt_publish_single):
     assert 'timestamp' in json_payload
     assert 'caller' in json_payload
     # The caller function will be different now because of the new file structure
-    # assert json_payload['caller'] == 'test_qtlogger_log_method' 
-
+    # assert json_payload['caller'] == 'test_qtlogger_log_method'

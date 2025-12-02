@@ -1,12 +1,23 @@
-import paho.mqtt.publish as publish
+"""
+QTlogger: A singleton MQTT logger for publishing log messages. 
+Allows configuration of MQTT broker, topic, and source identifier.
+Supports logging messages with severity levels and additional context.
+
+Meant to be used with QTlogs https://github.com/ausward/QTLogs
+"""
+
 import inspect
 import json
 import time # Added import for time module
 import threading
+from paho.mqtt import publish
+
 
 
 class QTlogger:
-    """ Singleton MQTT Logger for publishing log messages to the specified MQTT broker and topic. """
+    """ Singleton MQTT Logger for publishing log messages 
+    to the specified MQTT broker and topic.
+    """
     _instance = None
     topic: str
     broker: str
@@ -48,28 +59,31 @@ class QTlogger:
 
     def __print__(self):
         """ Print the current configuration of the logger. """
-        if not all(hasattr(self, attr) for attr in ['topic', 'broker', 'port', 'source']):
+        if not all(hasattr(self, attr)
+                for attr in ['topic', 'broker', 'port', 'source']):
             return "MQTT Logger is not configured."
-        return f"MQTT Logger Configuration:\n Topic: {self.topic}\n Broker: {self.broker}\n Port: {self.port}\n Source: {self.source}"
+        return f"MQTT Logger Configuration:\n\
+        Topic: {self.topic}\n Broker: {self.broker}\n\
+        Port: {self.port}\n Source: {self.source}"
 
-    def log(self, level: str, message: str, Extra: dict = None):
+    def log(self, level: str, message: str, extra_data: dict = None):
         """ Log a message with a given severity level.
         Args:
             level (str): Severity level of the log (e.g., 'INFO', 'ERROR').
             message (str): The log message.
-            Extra (dict, optional): Additional contextual information to include in the log.
+            extra_data (dict, optional): Additional contextual information to include in the log.
         """
         caller_frame = inspect.stack()
         caller_function = str(caller_frame[1].frame)
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        if Extra:
+        if extra_data:
             json_message = {
                 "from": self.source,
                 "payload": message,
                 "level": level,
                 "timestamp": current_time,
                 "caller": caller_function,
-                "extra": json.dumps(Extra)
+                "extra": json.dumps(extra_data)
             }
         else:
             json_message = {
@@ -99,11 +113,3 @@ def SetupLogger(topic:str, broker:str, port:int, source:str) -> QTlogger:
     """
     logger = QTlogger(topic, broker, port, source)
     return logger
-
-
-
-
-if __name__ == "__main__":
-    logger = SetupLogger("test", "localhost", 1883, "TestSource")
-    print(logger.__print__())
-    logger.log("INFO", "This is a test log message.", {"key": "value"})
