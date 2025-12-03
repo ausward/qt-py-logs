@@ -1,4 +1,7 @@
+
+
 # QT Py Logs
+
 
 A Python client for publishing log messages to an MQTT broker, designed to work with the [QTLogs project](https://github.com/ausward/QTLogs). This package provides a simple, singleton logger that can be used across a Python application to send structured log messages to a specified MQTT topic.
 
@@ -59,6 +62,8 @@ The log messages will be published to the specified MQTT topic in a JSON format:
     "caller": "your_function_name"
 }
 ```
+
+![qtpi](https://github.com/user-attachments/assets/2800894c-fbd8-48ad-83da-e0279a6c2b10)
 
 ## License
 
