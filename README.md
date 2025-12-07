@@ -21,7 +21,11 @@ pip install qt-py-logs
 
 ## Usage
 
-First, set up the logger with your MQTT broker details. This only needs to be done once per application.
+The `SetupLogger` function allows you to configure the logger. You can either pass in all the configuration details directly as arguments or provide a path to a YAML configuration file.
+
+### Option 1: Configuring with Python arguments
+
+Set up the logger with your MQTT broker details by passing the `topic`, `broker`, `port`, and `source` directly:
 
 ```python
 from qt_py_logs import SetupLogger
@@ -34,7 +38,28 @@ logger = SetupLogger(
 )
 ```
 
-Then, you can use the logger instance to log messages from anywhere in your application:
+### Option 2: Configuring with a YAML file
+
+Alternatively, you can configure the logger using a YAML file. Create a `config.yaml` file (or any other name) with the following structure:
+
+```yaml
+topic: "your/mqtt/topic"
+broker: "your_mqtt_broker.com"
+port: 1883
+source: "your_application_name"
+```
+
+Then, set up the logger by providing the path to your YAML configuration file using the `config_path` argument:
+
+```python
+from qt_py_logs import SetupLogger
+
+logger = SetupLogger(config_path="path/to/your/config.yaml")
+```
+
+The logger will automatically watch for changes in the YAML file and reload the configuration in real-time, so you don't need to restart your application.
+
+Once the logger is set up using either method, you can use the logger instance to log messages from anywhere in your application:
 
 ```python
 from qt_py_logs import QTlogger

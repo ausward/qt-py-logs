@@ -1,6 +1,6 @@
 [project]
 name = "qt-py-logs"
-version = "0.1.4"
+version = "0.2.0"
 description = "python client for https://github.com/ausward/QTLogs"
 authors = [
     {name = "Austin",email = "71802516+ausward@users.noreply.github.com"}
@@ -9,7 +9,9 @@ license = {text = "CC NC SA"}
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    "paho-mqtt (>=2.1.0)"
+    "paho-mqtt (>=2.1.0)",
+    "pyyaml (>=6.0.1)",
+    "watchdog (>=4.0.1)"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
