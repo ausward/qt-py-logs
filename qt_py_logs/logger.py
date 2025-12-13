@@ -96,7 +96,7 @@ class QTlogger:
         Topic: {self.topic}\n Broker: {self.broker}\n\
         Port: {self.port}\n Source: {self.source}"
 
-    def log(self, level: str, message: str, extra_data: dict = None):
+    def log(self, level: str, message: str, extra_data: dict = None, save: bool = True):
         """ Log a message with a given severity level.
         Args:
             level (str): Severity level of the log (e.g., 'INFO', 'ERROR').
@@ -113,7 +113,8 @@ class QTlogger:
                 "level": level,
                 "timestamp": current_time,
                 "caller": caller_function,
-                "extra": json.dumps(extra_data)
+                "extra": json.dumps(extra_data),
+                "save": save
             }
         else:
             json_message = {
@@ -121,7 +122,8 @@ class QTlogger:
                 "payload": message,
                 "level": level,
                 "timestamp": current_time,
-                "caller": caller_function
+                "caller": caller_function,
+                "save": save
             }
         threading.Thread(target=self._log, args=(json.dumps(json_message),)).start()
 

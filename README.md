@@ -73,10 +73,12 @@ logger.log("ERROR", "This is an error message.")
 
 # If you want to add additional fields to the log message
 extra_data = {"user_id": 1234, "operation": "data_processing"}
-logger.log("DEBUG", "This is a debug message with extra data.", Extra=extra_data)
+logger.log("DEBUG", "This is a debug message with extra data.", Extra=extra_data, save=False)
 ```
 
 The log messages will be published to the specified MQTT topic in a JSON format:
+
+The **save** field indicates whether to save the log message to persistent storage.
 
 ```json
 {
@@ -84,7 +86,8 @@ The log messages will be published to the specified MQTT topic in a JSON format:
     "payload": "This is an informational message.",
     "level": "INFO",
     "timestamp": "2025-11-24 10:00:00",
-    "caller": "your_function_name"
+    "caller": "your_function_name",
+    "save": true,
 }
 ```
 
